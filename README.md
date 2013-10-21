@@ -13,3 +13,7 @@ This is a PHP wrapper for the [BrowserMob Proxy](https://github.com/lightbody/br
 
 See [The tests](https://github.com/Element-34/PHPBrowserMobProxy/blob/master/Tests/ClientTest.php)
 
+## Packagist
+
+Now available via [Composer](https://getcomposer.org) as chartjes/PHPBrowserMobProxy
+
