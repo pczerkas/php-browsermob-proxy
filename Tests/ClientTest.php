@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'PHPBrowserMobProxy' . DIRECTORY_SEPARATOR . 'Client.php';
+require '../vendor/autoload.php';
 
 class ServerTest extends PHPUnit_Framework_TestCase {
   protected function setUp() {
