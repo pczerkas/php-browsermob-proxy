@@ -6,11 +6,12 @@
   "homepage": "https://github.com/chartjes/PHPBrowserMobProxy/",
   "license": "Apache 2",
   "authors": [
-    {
-    "name": "Chris Hartjes",
-    "email": "chartjes@littlehart.net",
-    "role": "maintainer"
-  },
+      {
+      "name": "Chris Hartjes",
+      "email": "chartjes@littlehart.net",
+      "role": "maintainer"
+    }
+  ],
   "require": {
     "rmccue/requests": ">=1.0"
   },
