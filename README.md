@@ -15,5 +15,5 @@ See [The tests](https://github.com/Element-34/PHPBrowserMobProxy/blob/master/Tes
 
 ## Packagist
 
-Now available via [Composer](https://getcomposer.org) as chartjes/PHPBrowserMobProxy
+Now available via [Composer](https://getcomposer.org) as chartjes/php-browsermob-proxy
 
