@@ -154,7 +154,7 @@ class PHPBrowserMobProxy_Client {
   }
 
   function remap_hosts($address, $ip_address) {
-    $data = json_encode(array($address => $address));
+    $data = json_encode(array($address => $ip_address));
     $response = Requests::post("http://" . $this->browsermob_url . "/proxy/" . $this->port . "/hosts",
                                 array('Content-Type' => 'application/json'),
                                 $data);
