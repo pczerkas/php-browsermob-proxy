@@ -5,7 +5,6 @@
   "keywords": ["testing"],
   "homepage": "https://github.com/chartjes/PHPBrowserMobProxy/",
   "license": "Apache 2",
-  "version": "0.3",
   "authors": [
       {
       "name": "Chris Hartjes",
