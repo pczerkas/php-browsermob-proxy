@@ -22,7 +22,15 @@ class PHPBrowserMobProxy_Client
     public function __construct($url)
     {
         $this->browsermob_url = $url;
+    }
 
+    /**
+     * Open connection to the proxy
+     *
+     * @return void
+     */
+    public function open()
+    {
         $parts = parse_url($this->browsermob_url);
         $this->hostname = $parts["host"];
 

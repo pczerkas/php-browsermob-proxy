@@ -22,6 +22,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->client = new PHPBrowserMobProxy_Client("localhost:8080");
+        $this->client->open();
     }
 
     /**
