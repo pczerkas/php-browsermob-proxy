@@ -1,119 +1,258 @@
 <?php
 require '../vendor/autoload.php';
 
-class ServerTest extends PHPUnit_Framework_TestCase {
-  protected function setUp() {
-    $this->client = new PHPBrowserMobProxy_Client("localhost:8080");
-  }
+/**
+ * Tests BrowserMobProxy Client
+ *
+ * @class ServerTest
+ * @category Testing
+ * @package  PHPBrowserMobProxy
+ * @author   Adam Goucher <adam@element34.ca>
+ * @author   Chris Hartjes <chartjes@littlehart.net>
+ * @license  Apache 2.0
+ * @link     https://github.com/chartjes/PHPBrowserMobProxy
+ */
+class ServerTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Setup method
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        $this->client = new PHPBrowserMobProxy_Client("localhost:8080");
+    }
 
-  protected function tearDown() {
-    $this->client->close();
-  }
+    /**
+     * Tear-down method
+     *
+     * @return void
+     */
+    protected function tearDown()
+    {
+        $this->client->close();
+    }
 
-  public function testProxyExists() {
-    $r = $this->client->close();
-  }
+    /**
+     * Test if the proxy exists
+     *
+     * @return void
+     */
+    public function testProxyExists()
+    {
+        $r = $this->client->close();
+    }
 
-  public function testNamedHar() {
-    $this->client->new_har("google");
-  }
-  
-  public function testUnNamedHar() {
-    $this->client->new_har();
-  }
+    /**
+     * Test that labelling HAR files works
+     *
+     * @return void
+     */
+    public function testNamedHar()
+    {
+        $this->client->newHar("google");
+    }
 
-  public function testNamedPage() {
-    $this->client->new_har();
-    $this->client->new_page("foo");
-  }
+    /**
+     * Test that we can create an un-named HAR
+     *
+     * @return void
+     */
+    public function testUnNamedHar()
+    {
+        $this->client->newHar();
+    }
 
-  public function testUnNamedPage() {
-    $this->client->new_har("Aa");
-    $this->client->new_page("Bb");
-  }
+    /**
+     * Test we can create a named page
+     *
+     * @return void
+     */
+    public function testNamedPage()
+    {
+        $this->client->newHar();
+        $this->client->newPage("foo");
+    }
 
-  public function testGetHar() {
-    $this->client->new_har("Aa");
-    $this->client->new_page("Bb");
-    $h = $this->client->har;
-  }
+    /**
+     * Test we can create an un-named page
+     *
+     * @return void
+     */
+    public function testUnNamedPage()
+    {
+        $this->client->newHar("Aa");
+        $this->client->newPage("Bb");
+    }
 
-  public function testBlackList() {
-    $this->client->whitelist('.*\.doubleclick\.net', 200);
-    $this->client->new_har("noads");
-  }
+    /**
+     * Test we can retriver a named HAR
+     *
+     * @return void
+     */
+    public function testGetHar()
+    {
+        $this->client->newHar("Aa");
+        $this->client->newPage("Bb");
+        $h = $this->client->har;
+    }
 
-  public function testWhiteList() {
-    $this->client->whitelist('.*\.doubleclick\.net', 200);
-    $this->client->new_har("noads");
-  }
+    /**
+     * Test the blacklist functionality
+     *
+     * @return void
+     */
+    public function testBlackList()
+    {
+        $this->client->whitelist('.*\.doubleclick\.net', 200);
+        $this->client->newHar("noads");
+    }
 
-  public function testBasicAuth() {
-    $response = $this->client->basic_auth('yoyo.org', array('username' => 'foo', 'password' => 'bar'));
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test the whitelist functionality
+     *
+     * @return void
+     */
+    public function testWhiteList()
+    {
+        $this->client->whitelist('.*\.doubleclick\.net', 200);
+        $this->client->newHar("noads");
+    }
 
-  public function testHeaders() {
-    $response = $this->client->headers(array('ribbit' => 'rabbit'));
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test basic auth
+     *
+     * @return void
+     */
+    public function testBasicAuth()
+    {
+        $response = $this->client->basicAuth(
+            'yoyo.org',
+            array('username' => 'foo', 'password' => 'bar')
+        );
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testResponseInterceptor() {
-    $response = $this->client->response_interceptor('ffdskl');
-    $this->assertEquals($response->status_code, 200);
-  }
-  
-  public function testRequestInterceptor() {
-    $response = $this->client->request_interceptor('ffdskl');
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test we send headers
+     *
+     * @return void
+     */
+    public function testHeaders()
+    {
+        $response = $this->client->headers(array('ribbit' => 'rabbit'));
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testUpstreamLimists() {
-    $limits = array (
-      "downstreamKbps" => 12,
-      "upstreamKbps" => 34,
-      "latency" => 3
-    );
-    $response = $this->client->limits($limits);
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test that the response inteceptor works
+     *
+     * @return void
+     */
+    public function testResponseInterceptor()
+    {
+        $response = $this->client->responseInterceptor('ffdskl');
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testTimeouts() {
-    $timeouts = array (
-      "request" => 12,
-      "read" => 34,
-      "connection" => 3,
-      "dns" => 2
-    );
-    $response = $this->client->timeouts($timeouts);
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test we can create a named page
+     *
+     * @return void
+     */
+    public function testRequestInterceptor()
+    {
+        $response = $this->client->requestInterceptor('ffdskl');
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testRemapHosts() {
-    $response = $this->client->remap_hosts("a.b.c", "d.e.f");
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test we can set upstream limits
+     *
+     * @return void
+     */
+    public function testUpstreamLimits()
+    {
+        $limits = array (
+            "downstreamKbps" => 12,
+            "upstreamKbps" => 34,
+            "latency" => 3
+        );
+        $response = $this->client->limits($limits);
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testWaitForTrafficToStop() {
-    $response = $this->client->wait_for_traffic_to_stop(5, 30);
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test we can set timeouts
+     *
+     * @return void
+     */
+    public function testTimeouts()
+    {
+        $timeouts = array (
+            "request" => 12,
+            "read" => 34,
+            "connection" => 3,
+            "dns" => 2
+        );
+        $response = $this->client->timeouts($timeouts);
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testClearDNSCache() {
-    $response = $this->client->clear_dns_cache();
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test we can remap hosts
+     *
+     * @return void
+     */
+    public function testRemapHosts()
+    {
+        $response = $this->client->remapHosts("a.b.c", "d.e.f");
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testRewriteURL() {
-    $response = $this->client->rewrite_url('foo', 'bar');
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test we can set traffic stop times
+     *
+     * @return void
+     */
+    public function testWaitForTrafficToStop()
+    {
+        $response = $this->client->waitForTrafficToStop(5, 30);
+        $this->assertEquals($response->status_code, 200);
+    }
 
-  public function testRetry() {
-    $response = $this->client->retry(3);
-    $this->assertEquals($response->status_code, 200);
-  }
+    /**
+     * Test we can clear the proxy's DNS cache
+     *
+     * @return void
+     */
+    public function testClearDNSCache()
+    {
+        $response = $this->client->clearDnsCache();
+        $this->assertEquals($response->status_code, 200);
+    }
 
+    /**
+     * Test we can rewrite URL's inside the proxy
+     *
+     * @return void
+     */
+    public function testRewriteURL()
+    {
+        $response = $this->client->rewriteUrl('foo', 'bar');
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
+     * Test we can set a retry time for the proxy
+     *
+     * @return void
+     */
+    public function testRetry()
+    {
+        $response = $this->client->retry(3);
+        $this->assertEquals($response->status_code, 200);
+    }
 }
-
 ?>
