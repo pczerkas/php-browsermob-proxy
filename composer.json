@@ -25,5 +25,10 @@
     "psr-0": {
       "PHPBrowserMobProxy": "src"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.0"
+    }
   }
 }
