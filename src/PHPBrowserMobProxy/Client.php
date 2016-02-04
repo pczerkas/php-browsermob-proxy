@@ -14,6 +14,18 @@
  */
 class PHPBrowserMobProxy_Client
 {
+    /** @var string */
+    private $hostname;
+
+    /** @var string */
+    private $port;
+
+    /** @var string */
+    private $url;
+
+    /** @var string */
+    private $browsermob_url;
+
     /**
      * Class constructor
      *
@@ -274,7 +286,9 @@ class PHPBrowserMobProxy_Client
      *
      * @param array $options options needed for limiting connections
      *
-     * @return string
+     * @return Requests_Response
+     *
+     * @throws Exception
      */
     public function limits($options)
     {
@@ -303,7 +317,9 @@ class PHPBrowserMobProxy_Client
      *
      * @param array $options options needed for timeouts
      *
-     * @return string
+     * @return Requests_Response
+     *
+     * @throws Exception
      */
     public function timeouts($options)
     {
