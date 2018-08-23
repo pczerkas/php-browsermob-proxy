@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1ea19f6acb154e9a206523c97060210",
+    "content-hash": "0cc484a71b33098bc315304062e67280",
     "packages": [
         {
             "name": "rmccue/requests",
@@ -63,7 +63,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0"
+        "php": ">=7.0.0"
     },
     "platform-dev": []
 }

@@ -1,6 +1,5 @@
 {
     "name": "rapidspike/php-browsermob-proxy",
-    "type": "library",
     "description": "Library for using browsermob-proxy with PHP projects",
     "license": "MIT",
     "keywords": [
@@ -8,8 +7,6 @@
         "proxy",
         "browsermob"
     ],
-    "homepage": "https://github.com/rapidspike/php-browsermob-proxy",
-    "license": "Apache-2.0",
     "authors": [
         {
             "name": "James Tyler",
@@ -18,11 +15,8 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.0.0",
         "rmccue/requests": ">=1.0"
-    },
-    "config": {
-        "bin-dir": "bin/"
     },
     "autoload": {
         "psr-0": {
