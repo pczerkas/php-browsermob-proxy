@@ -1,4 +1,5 @@
 <?php
+
 require '../vendor/autoload.php';
 
 /**
@@ -14,6 +15,7 @@ require '../vendor/autoload.php';
  */
 class ServerTest extends PHPUnit_Framework_TestCase
 {
+
     /**
      * Setup method
      *
@@ -21,7 +23,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->client = new PHPBrowserMobProxy_Client("localhost:8080");
+        $this->client = new RapidSpike\BrowserMobProxy\Client("localhost:8080");
         $this->client->open();
     }
 
@@ -129,8 +131,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
     public function testBasicAuth()
     {
         $response = $this->client->basicAuth(
-            'yoyo.org',
-            array('username' => 'foo', 'password' => 'bar')
+                'yoyo.org', array('username' => 'foo', 'password' => 'bar')
         );
         $this->assertEquals($response->status_code, 200);
     }
@@ -175,7 +176,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpstreamLimits()
     {
-        $limits = array (
+        $limits = array(
             "downstreamKbps" => 12,
             "upstreamKbps" => 34,
             "latency" => 3
@@ -191,7 +192,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
      */
     public function testTimeouts()
     {
-        $timeouts = array (
+        $timeouts = array(
             "request" => 12,
             "read" => 34,
             "connection" => 3,
@@ -255,5 +256,5 @@ class ServerTest extends PHPUnit_Framework_TestCase
         $response = $this->client->retry(3);
         $this->assertEquals($response->status_code, 200);
     }
+
 }
-?>

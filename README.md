@@ -4,10 +4,6 @@ This is a PHP wrapper for the [BrowserMob Proxy](https://github.com/lightbody/br
 
 ##  GETTING STARTED
 
-*   This driver has been packaged for distribution via PEAR. So...
-
-        pear channel-discover element-34.github.com/pear
-        pear install -f element-34/PHPBrowserMobProxy
 
 ##  DOCUMENTATION
 
