@@ -144,15 +144,17 @@ class Client
      * @param string $label
      * @param bool $captureHeaders
      * @param bool $captureContent
+     * @param bool $captureCookies
      *
      * @return \Requests_Response
      */
-    public function newHar(string $label = '', bool $captureHeaders = false,  bool $captureContent = false): \Requests_Response
+    public function newHar(string $label = '', bool $captureHeaders = false,  bool $captureContent = false, bool $captureCookies = false): \Requests_Response
     {
         $data = array(
             "initialPageRef" => $label, 
             'captureHeaders' => ($captureHeaders ? "true" : "false"),
             'captureContent' => ($captureContent ? "true" : "false"),
+            'captureCookies' => ($captureCookies ? "true" : "false"),
         );
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/har";
         return \Requests::put($url, [], $data);
