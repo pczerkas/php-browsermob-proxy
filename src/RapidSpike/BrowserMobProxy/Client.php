@@ -302,13 +302,53 @@ class Client
             "dns" => "dnsCacheTimeout"
         );
 
+        $put_options = array();
+
         foreach (array_keys($options) as $option_name) {
-            if (!array_key_exists($option_name, $keys)) {
+            if (array_key_exists($option_name, $keys)) {
+                $put_options[$keys[$option_name]] = $options[$option_name];
+            } else {
                 throw new \Exception($option_name . " is not a valid 'timeouts' option");
             }
         }
+        if (empty($put_options)) {
+            throw new \Exception("timeouts options is empty");
+        }
 
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/timeout";
+        return \Requests::put($url, [], $this->_encodeArray($options));
+    }
+
+    /**
+     * Set wait timeouts
+     *
+     * @param array $options
+     *
+     * @return \Requests_Response
+     *
+     * @throws \Exception
+     */
+    public function waits(array $options): \Requests_Response
+    {
+        $keys = array(
+            "quiet" => "quietPeriodInMs",
+            "timeout" => "timeoutInMs ",
+        );
+
+        $put_options = array();
+
+        foreach (array_keys($options) as $option_name) {
+            if (array_key_exists($option_name, $keys)) {
+                $put_options[$keys[$option_name]] = $options[$option_name];
+            } else {
+                throw new \Exception($option_name . " is not a valid 'wait' option");
+            }
+        }
+        if (empty($put_options)) {
+            throw new \Exception("waits options is empty");
+        }
+
+        $url = "http://{$this->browsermob_url}/proxy/{$this->port}/wait";
         return \Requests::put($url, [], $this->_encodeArray($options));
     }
 
