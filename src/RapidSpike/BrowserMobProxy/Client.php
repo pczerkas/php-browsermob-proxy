@@ -80,7 +80,7 @@ class Client
      */
     public function close(): \Requests_Response
     {
-        return \Requests::delete("http://{$this->browsermob_url}/{$this->port}");
+        return \Requests::delete("http://{$this->browsermob_url}/proxy/{$this->port}");
     }
 
     /**
