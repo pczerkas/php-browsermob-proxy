@@ -2,6 +2,9 @@
 
 namespace RapidSpike\BrowserMobProxy;
 
+use WpOrg\Requests\Response;
+use WpOrg\Requests\Requests;
+
 /**
  * BrowserMob Proxy Client class for interacting with the BrowserMobProxy API.
  * Completely assumes that the servlet software is installed and running as
@@ -51,9 +54,9 @@ class Client
      *
      * @param string  $query
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function open(string $query = null): \Requests_Response
+    public function open(string $query = null): Response
     {
         $parts = parse_url($this->browsermob_url);
         $this->hostname = $parts["host"];
@@ -64,7 +67,7 @@ class Client
         }
 
         $query .= (!empty($this->proxy) ? "&httpProxy={$this->proxy}" : '');
-        $response = \Requests::post("http://{$this->browsermob_url}/proxy?{$query}", [], $data);
+        $response = Requests::post("http://{$this->browsermob_url}/proxy?{$query}", [], $data);
 
         $decoded = json_decode($response->body, true);
         $this->port = ($decoded ? $decoded["port"] : $this->instance_port);
@@ -76,11 +79,11 @@ class Client
     /**
      * Close connection to the proxy
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function close(): \Requests_Response
+    public function close(): Response
     {
-        return \Requests::delete("http://{$this->browsermob_url}/proxy/{$this->port}");
+        return Requests::delete("http://{$this->browsermob_url}/proxy/{$this->port}");
     }
 
     /**
@@ -146,18 +149,18 @@ class Client
      * @param bool $captureContent
      * @param bool $captureCookies
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function newHar(string $label = '', bool $captureHeaders = false,  bool $captureContent = false, bool $captureCookies = false): \Requests_Response
+    public function newHar(string $label = '', bool $captureHeaders = false,  bool $captureContent = false, bool $captureCookies = false): Response
     {
         $data = array(
-            "initialPageRef" => $label, 
+            "initialPageRef" => $label,
             'captureHeaders' => ($captureHeaders ? "true" : "false"),
             'captureContent' => ($captureContent ? "true" : "false"),
             'captureCookies' => ($captureCookies ? "true" : "false"),
         );
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/har";
-        return \Requests::put($url, [], $data);
+        return Requests::put($url, [], $data);
     }
 
     /**
@@ -165,13 +168,13 @@ class Client
      *
      * @param string $label
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function newPage(string $label = ''): \Requests_Response
+    public function newPage(string $label = ''): Response
     {
         $data = "pageRef=" . $label;
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/har/pageRef";
-        return \Requests::put($url, [], $data);
+        return Requests::put($url, [], $data);
     }
 
     /**
@@ -180,13 +183,13 @@ class Client
      * @param string $regexp
      * @param int $status_code
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function blacklist(string $regexp, int $status_code): \Requests_Response
+    public function blacklist(string $regexp, int $status_code): Response
     {
         $data = $this->_encodeArray(["regex" => $regexp, "status" => $status_code]);
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/blacklist";
-        return \Requests::put($url, [], $data);
+        return Requests::put($url, [], $data);
     }
 
     /**
@@ -195,13 +198,13 @@ class Client
      * @param string $regexp
      * @param int $status_code
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function whitelist(string $regexp, int $status_code): \Requests_Response
+    public function whitelist(string $regexp, int $status_code): Response
     {
         $data = $this->_encodeArray(["regex" => $regexp, "status" => $status_code]);
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/whitelist";
-        return \Requests::put($url, [], $data);
+        return Requests::put($url, [], $data);
     }
 
     /**
@@ -210,13 +213,13 @@ class Client
      * @param string $domain
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function basicAuth(string $domain, array $options): \Requests_Response
+    public function basicAuth(string $domain, array $options): Response
     {
         $data = json_encode($options);
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/auth/basic/{$domain}";
-        return \Requests::post($url, ['Content-Type' => 'application/json'], $data);
+        return Requests::post($url, ['Content-Type' => 'application/json'], $data);
     }
 
     /**
@@ -224,13 +227,13 @@ class Client
      *
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function headers(array $options): \Requests_Response
+    public function headers(array $options): Response
     {
         $data = json_encode($options);
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/headers";
-        return \Requests::post($url, ['Content-Type' => 'application/json'], $data);
+        return Requests::post($url, ['Content-Type' => 'application/json'], $data);
     }
 
     /**
@@ -238,12 +241,12 @@ class Client
      *
      * @param string $js
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function responseInterceptor(string $js): \Requests_Response
+    public function responseInterceptor(string $js): Response
     {
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/interceptor/response";
-        return \Requests::post($url, ['Content-Type' => 'x-www-form-urlencoded'], $js);
+        return Requests::post($url, ['Content-Type' => 'x-www-form-urlencoded'], $js);
     }
 
     /**
@@ -251,12 +254,12 @@ class Client
      *
      * @param string $js
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function requestInterceptor(string $js): \Requests_Response
+    public function requestInterceptor(string $js): Response
     {
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/interceptor/request";
-        return \Requests::post($url, ['Content-Type' => 'x-www-form-urlencoded'], $js);
+        return Requests::post($url, ['Content-Type' => 'x-www-form-urlencoded'], $js);
     }
 
     /**
@@ -264,9 +267,9 @@ class Client
      *
      * @param array $options options needed for limiting connections
      *
-     * @return string
+     * @return Response
      */
-    public function limits(array $options): \Requests_Response
+    public function limits(array $options): Response
     {
         $keys = array(
             "downstreamKbps" => "downstreamKbps",
@@ -281,7 +284,7 @@ class Client
         }
 
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/limit";
-        return \Requests::put($url, [], $this->_encodeArray($options));
+        return Requests::put($url, [], $this->_encodeArray($options));
     }
 
     /**
@@ -289,11 +292,11 @@ class Client
      *
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return Response
      *
      * @throws \Exception
      */
-    public function timeouts(array $options): \Requests_Response
+    public function timeouts(array $options): Response
     {
         $keys = array(
             "request" => "requestTimeout",
@@ -316,7 +319,7 @@ class Client
         }
 
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/timeout";
-        return \Requests::put($url, [], $this->_encodeArray($options));
+        return Requests::put($url, [], $this->_encodeArray($options));
     }
 
     /**
@@ -324,11 +327,11 @@ class Client
      *
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return Response
      *
      * @throws \Exception
      */
-    public function waits(array $options): \Requests_Response
+    public function waits(array $options): Response
     {
         $keys = array(
             "quiet" => "quietPeriodInMs",
@@ -349,7 +352,7 @@ class Client
         }
 
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/wait";
-        return \Requests::put($url, [], $this->_encodeArray($options));
+        return Requests::put($url, [], $this->_encodeArray($options));
     }
 
     /**
@@ -358,13 +361,13 @@ class Client
      * @param string $address
      * @param string $ip_address
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function remapHosts(string $address, string $ip_address): \Requests_Response
+    public function remapHosts(string $address, string $ip_address): Response
     {
         $data = json_encode([$address => $ip_address]);
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/hosts";
-        return \Requests::post($url, ['Content-Type' => 'application/json'], $data);
+        return Requests::post($url, ['Content-Type' => 'application/json'], $data);
     }
 
     /**
@@ -373,9 +376,9 @@ class Client
      * @param int $quiet_period
      * @param int $timeout
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    function waitForTrafficToStop(int $quiet_period, int $timeout): \Requests_Response
+    function waitForTrafficToStop(int $quiet_period, int $timeout): Response
     {
         $data = $this->_encodeArray([
             'quietPeriodInMs' => (string) ($quiet_period * 1000),
@@ -383,18 +386,18 @@ class Client
         ]);
 
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/wait";
-        return \Requests::put($url, [], $data);
+        return Requests::put($url, [], $data);
     }
 
     /**
      * Method for clearing the DNS cache set with remapHosts
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function clearDnsCache(): \Requests_Response
+    public function clearDnsCache(): Response
     {
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/dns/cache";
-        return \Requests::delete($url);
+        return Requests::delete($url);
     }
 
     /**
@@ -403,13 +406,13 @@ class Client
      * @param string $match
      * @param string $replace
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function rewriteUrl(string $match, string $replace): \Requests_Response
+    public function rewriteUrl(string $match, string $replace): Response
     {
         $data = $this->_encodeArray(['matchRegex' => $match, 'replace' => $replace]);
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/rewrite";
-        return \Requests::put($url, [], $data);
+        return Requests::put($url, [], $data);
     }
 
     /**
@@ -417,13 +420,13 @@ class Client
      *
      * @param int $retry_count
      *
-     * @return \Requests_Response
+     * @return Response
      */
-    public function retry(int $retry_count): \Requests_Response
+    public function retry(int $retry_count): Response
     {
         $data = $this->_encodeArray(['retrycount' => $retry_count]);
         $url = "http://{$this->browsermob_url}/proxy/{$this->port}/retry";
-        return \Requests::put($url, [], $data);
+        return Requests::put($url, [], $data);
     }
 
 }
